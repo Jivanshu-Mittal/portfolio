@@ -1,0 +1,331 @@
+# DEPLOYMENT CHECKLIST — Portfolio to GitHub & Vercel
+
+## Project Overview
+- Next.js 14 (App Router) + TypeScript strict + Tailwind CSS
+- React Aria for accessible UI primitives
+- Fluid typography, CSS animations, glassmorphism design system
+- JSON-LD structured data, PWA manifest, SEO-optimized metadata
+
+---
+
+## 1. CRITICAL: Fix Build Error (Must Fix Before Deploy)
+
+**Problem**: Build fails on `/404` prerendering — missing `_document` module
+
+**Fix**: Update `next.config.js`:
+
+```js
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  reactStrictMode: true,
+  experimental: {
+    turbo: {
+      resolveAlias: {
+        '@/*': './src/*',
+      },
+    },
+  },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: '**',  // TODO: Restrict to known domains
+      },
+    ],
+  },
+  // ADD ONE OF THESE:
+  // Option A: Static export (recommended for portfolio)
+  output: 'export',
+  // Option B: Keep SSR - ensure proper error handling
+};
+
+module.exports = nextConfig;
+```
+
+**Test**: `npm run build` must pass with exit code 0.
+
+---
+
+## 2. SECURITY HARDENING
+
+| Area | Action | Status |
+|------|--------|--------|
+| **Secrets** | Never commit `.env`, `.env.local`, API keys, tokens | `.gitignore` covers this ✅ |
+| **Content Security Policy** | Add CSP headers in `next.config.js` → `async headers()` | ⏳ TODO |
+| **External Images** | Restrict `remotePatterns` to known domains (github.com, avatars.githubusercontent.com, etc.) | ⏳ TODO |
+| **Dependencies** | Run `npm audit` and `npm audit fix` before deploy | ⏳ TODO |
+| **Supply Chain** | Pin exact versions in `package.json` (avoid `^`, `~`) | ⏳ TODO |
+| **GitHub** | Enable Dependabot alerts, Secret scanning, Push protection | ⏳ TODO |
+| **Vercel** | Use Environment Variables in dashboard (not in code) for runtime secrets | ⏳ TODO |
+
+### CSP Headers Example (add to next.config.js):
+```js
+async headers() {
+  return [
+    {
+      source: '/:path*',
+      headers: [
+        {
+          key: 'Content-Security-Policy',
+          value: [
+            "default-src 'self'",
+            "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live",
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+            "font-src 'self' https://fonts.gstatic.com data:",
+            "img-src 'self' data: https:",
+            "connect-src 'self' https://vitals.vercel-insights.com",
+            "frame-ancestors 'none'",
+            "base-uri 'self'",
+            "form-action 'self'",
+          ].join('; '),
+        },
+        { key: 'X-Frame-Options', value: 'DENY' },
+        { key: 'X-Content-Type-Options', value: 'nosniff' },
+        { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
+        { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+      ],
+    },
+  ];
+}
+```
+
+---
+
+## 3. BUG/QUALITY FIXES
+
+| Issue | Fix | Status |
+|-------|-----|--------|
+| **ESLint config missing** | Create `.eslintrc.json` extending `next/core-web-vitals` | ⏳ TODO |
+| **TypeScript strict** | Already enabled ✅ — run `npx tsc --noEmit` to verify | ✅ |
+| **Accessibility** | Strong (React Aria, skip links, ARIA, reduced motion) | ✅ |
+| **Performance** | Add `next/font` preload (done), consider `next/image` for project covers | ⏳ TODO |
+| **404 page** | Fix build error above; test `/invalid-route` in dev | ⏳ TODO |
+| **Favicon/OG image** | Add real files to `/public`: `favicon.ico`, `og-image.png`, `icon-192.png`, `icon-512.png` | ⏳ TODO |
+
+### Create `.eslintrc.json`:
+```json
+{
+  "extends": ["next/core-web-vitals"],
+  "rules": {
+    "@next/next/no-html-link-for-pages": "off",
+    "react/no-unescaped-entities": "off"
+  }
+}
+```
+
+### Add Missing Public Assets:
+- `/public/favicon.ico` (32x32, 16x16)
+- `/public/og-image.png` (1200x630) — used in metadata
+- `/public/icon-192.png` (192x192) — PWA manifest
+- `/public/icon-512.png` (512x512) — PWA manifest
+- `/public/resume.pdf` — referenced in data.ts
+
+---
+
+## 4. GITHUB REPOSITORY SETUP
+
+### Initialize & Push:
+```bash
+# 1. Initialize git (if not done)
+git init
+git add .
+git commit -m "Initial commit: Portfolio v1.0"
+
+# 2. Create GitHub repo
+gh repo create jivanshu/portfolio --public --source=. --remote=origin --push
+
+# 3. Or manually via GitHub web UI, then:
+git remote add origin https://github.com/jivanshu/portfolio.git
+git branch -M main
+git push -u origin main
+```
+
+### Branch Protection (GitHub UI: Settings → Branches → Add rule for `main`):
+- [ ] Require a pull request before merging
+- [ ] Require approvals (1)
+- [ ] Dismiss stale PR approvals when new commits are pushed
+- [ ] Require status checks to pass before merging
+  - [ ] `build` (GitHub Actions)
+  - [ ] `lint` (GitHub Actions)
+  - [ ] `typecheck` (GitHub Actions)
+- [ ] Require linear history
+- [ ] Include administrators
+
+### Create `.github/workflows/ci.yml`:
+```yaml
+name: CI
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npm run build
+
+  # Optional: Add dependabot auto-merge for patch updates
+```
+
+### Enable GitHub Security Features (Settings → Security & analysis):
+- [ ] Dependency graph
+- [ ] Dependabot alerts
+- [ ] Dependabot security updates
+- [ ] Secret scanning
+- [ ] Push protection
+
+---
+
+## 5. VERCEL DEPLOYMENT
+
+### Connect Repository:
+1. Go to [vercel.com/new](https://vercel.com/new)
+2. Import `jivanshu/portfolio` from GitHub
+3. Configure:
+   - **Framework Preset**: Next.js (auto-detected)
+   - **Build Command**: `npm run build` (default)
+   - **Output Directory**: `.next` (default) — or `out` if using `output: 'export'`
+   - **Install Command**: `npm ci` (default)
+
+### Environment Variables (Vercel Dashboard → Settings → Environment Variables):
+| Name | Value | Environment |
+|------|-------|-------------|
+| `NEXT_PUBLIC_SITE_URL` | `https://jivanshu.dev` | Production, Preview |
+| `NEXT_PUBLIC_GA_ID` | (optional) | Production |
+
+### Custom Domain:
+1. Vercel Dashboard → Settings → Domains
+2. Add `jivanshu.dev` and `www.jivanshu.dev`
+3. Configure DNS at your registrar:
+   - **A record**: `@` → `76.76.21.21`
+   - **CNAME**: `www` → `cname.vercel-dns.com`
+4. Enable "Redirect www to non-www" (or vice versa)
+
+### Preview Deployments:
+- Enabled by default — every PR gets a unique preview URL
+- Configure `vercel.json` for custom preview behavior if needed
+
+---
+
+## 6. POST-DEPLOY VERIFICATION
+
+### Automated Checks:
+- [ ] `npm run build` passes locally (exit code 0)
+- [ ] `npm run lint` passes (exit code 0)
+- [ ] `npx tsc --noEmit` passes (exit code 0)
+- [ ] GitHub Actions CI passes on `main` branch
+
+### Manual Testing:
+- [ ] Home page loads: `https://jivanshu.dev`
+- [ ] All sections render: Hero, Who, What, Philosophy, Ecosystem, Work, Experience, Process, Now, Why, Contact
+- [ ] Navigation works: Desktop nav, Mobile nav, Section nav (sidebar)
+- [ ] Mobile menu opens/closes correctly (100dvh, staggered animation)
+- [ ] Dark mode / color scheme correct (ink background, paper text)
+- [ ] Reduced motion respected: `prefers-reduced-motion: reduce` disables animations
+- [ ] Keyboard navigation: Tab through all interactive elements
+- [ ] Focus indicators visible on all interactive elements
+- [ ] Skip link works: Tab once → "Skip to main content" → Enter
+- [ ] 404 page works: Visit `https://jivanshu.dev/invalid-route`
+- [ ] Contact buttons work: mailto:, tel:, download resume
+- [ ] External links open in new tab: GitHub, LinkedIn, Twitter
+- [ ] Project cards link to correct GitHub/demo URLs
+- [ ] JSON-LD validates: [Rich Results Test](https://search.google.com/test/rich-results)
+- [ ] PWA manifest valid: Check DevTools → Application → Manifest
+
+### Performance & SEO:
+- [ ] Lighthouse (Desktop): Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90
+- [ ] Lighthouse (Mobile): Performance ≥ 85, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90
+- [ ] Core Web Vitals: LCP < 2.5s, INP < 200ms, CLS < 0.1
+- [ ] CSP headers present: `curl -I https://jivanshu.dev | grep -i content-security-policy`
+- [ ] Security headers present: X-Frame-Options, X-Content-Type-Options, Referrer-Policy
+- [ ] Sitemap accessible: `https://jivanshu.dev/sitemap.xml` (if using next-sitemap)
+- [ ] robots.txt accessible: `https://jivanshu.dev/robots.txt`
+
+### Search Console & Analytics:
+- [ ] Submit sitemap to Google Search Console
+- [ ] Verify domain ownership in Google Search Console
+- [ ] Set up Vercel Analytics (privacy-friendly) or Umami/Plausible
+- [ ] Check for crawl errors after 24-48 hours
+
+---
+
+## 7. OPTIONAL ENHANCEMENTS (Post-Launch)
+
+| Enhancement | Why | Effort |
+|-------------|-----|--------|
+| **Sentry / LogRocket** | Error tracking in production | Low |
+| **Vercel Analytics** | Privacy-friendly page views | Low |
+| **Umami / Plausible** | Self-hosted analytics alternative | Medium |
+| **Husky + lint-staged** | Pre-commit quality gates | Low |
+| **Conventional commits** | Automated changelogs | Low |
+| **Dependabot PRs** | Auto-update dependencies | Low |
+| **next-sitemap** | Auto-generate sitemap.xml & robots.txt | Low |
+| **next/image** for project covers | Optimized images, blur placeholders | Medium |
+| **Middleware for i18n/routing** | If adding multi-language later | High |
+
+### Quick Wins (run after deploy):
+```bash
+# 1. Add Husky for pre-commit hooks
+npm install -D husky lint-staged
+npx husky install
+npx husky add .husky/pre-commit "npx lint-staged"
+
+# 2. Add lint-staged config to package.json
+# "lint-staged": { "*.{ts,tsx}": ["eslint --fix", "prettier --write"] }
+
+# 3. Add next-sitemap for SEO
+npm install -D next-sitemap
+# Create next-sitemap.config.js
+```
+
+---
+
+## SUMMARY: MINIMUM VIABLE DEPLOY
+
+**Do these 6 things in order:**
+
+1. ☐ **Fix build error** — Add `output: 'export'` to `next.config.js` (or fix SSR 404 handling)
+2. ☐ **Add real assets** — favicon.ico, og-image.png, icon-192.png, icon-512.png, resume.pdf to `/public`
+3. ☐ **Create `.eslintrc.json`** — Extend `next/core-web-vitals`
+4. ☐ **Run `npm audit fix`** — Fix vulnerabilities
+5. ☐ **Push to GitHub** — With branch protection + CI workflow (`.github/workflows/ci.yml`)
+6. ☐ **Import to Vercel** — Configure env vars, custom domain, deploy
+
+---
+
+## FILES TO CREATE/MODIFY BEFORE DEPLOY
+
+| File | Action |
+|------|--------|
+| `next.config.js` | Add `output: 'export'` + CSP headers + restricted image domains |
+| `.eslintrc.json` | Create (extend `next/core-web-vitals`) |
+| `/public/favicon.ico` | Add real favicon |
+| `/public/og-image.png` | Add 1200x630 OG image |
+| `/public/icon-192.png` | Add 192x192 PWA icon |
+| `/public/icon-512.png` | Add 512x512 PWA icon |
+| `/public/resume.pdf` | Add actual resume |
+| `.github/workflows/ci.yml` | Create CI workflow |
+| `package.json` | Pin exact versions, add `lint-staged` config |
+
+---
+
+## CONTACT / SUPPORT
+
+If issues arise during deploy:
+- **Build errors**: Check Vercel build logs, run `npm run build` locally first
+- **404 on refresh**: Ensure `output: 'export'` for static hosting, or check Vercel rewrites
+- **Images not loading**: Check `next.config.js` `remotePatterns` includes your image domains
+- **Styles broken**: Check Tailwind content paths in `tailwind.config.ts`
+- **Fonts not loading**: Verify `next/font` config in `layout.tsx`
+
+---
+
+*Generated: 2026-11-19*
+*Project: Jivanshu Mittal Portfolio*
+*Stack: Next.js 14, TypeScript, Tailwind CSS, React Aria*
