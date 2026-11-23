@@ -54,7 +54,7 @@ const inter = Inter({
   subsets: ['latin'],
   variable: '--font-body',
   display: 'swap',
-  preload: true,
+  preload: false,
   weight: ['400', '500', '600', '700'],
 });
 
@@ -62,7 +62,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
-  preload: true,
+  preload: false,
   weight: ['400', '500', '600', '700'],
 });
 
