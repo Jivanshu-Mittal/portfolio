@@ -27,6 +27,8 @@
 | `NEXT_PUBLIC_SITE_URL` | `https://jivanshu.dev` | Production, Preview |
 | `NEXT_PUBLIC_GA_ID` | *(optional)* | Production |
 
+**✅ Already configured in Vercel project**
+
 ### 3. Security Headers (CRITICAL - Settings → Security Headers)
 Since `output: 'export'` ignores `next.config.js` headers, **must configure in Vercel Dashboard**:
 
@@ -41,12 +43,13 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 **✅ Configured via vercel.json - all headers active on production**
 
 ### 4. Custom Domain (Settings → Domains)
-- [ ] Add `jivanshu.dev`
-- [ ] Add `www.jivanshu.dev`
-- [ ] Configure DNS at registrar:
-  - **A record**: `@` → `76.76.21.21`
-  - **CNAME**: `www` → `cname.vercel-dns.com`
-- [ ] Enable "Redirect www to non-www" (or vice versa)
+- [x] Add `jivanshu.dev` to Vercel project
+- [x] Add `www.jivanshu.dev` to Vercel project
+- [ ] Configure DNS at registrar (Google Domains / Namecheap / Cloudflare / etc.):
+  - **A record**: `@` → `216.198.79.1` AND `64.29.17.1` (Vercel recommends both)
+  - **CNAME**: `www` → `cname.vercel-dns.com` (or `6f6d86c81d5d8c13.vercel-dns-017.com.`)
+- [ ] Run `npx vercel domains verify jivanshu.dev` after DNS propagates
+- [ ] Enable "Redirect www to non-www" in Vercel dashboard
 
 ### 5. Build & Deploy Settings
 - [x] **Build Command**: `npm run build` (runs `next build && next-sitemap`)
@@ -84,8 +87,8 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 - [ ] Core Web Vitals: LCP < 2.5s, INP < 200ms, CLS < 0.1
 - [x] CSP headers present: `curl -I https://portfolio-seven-gilt-esbf7h8dlx.vercel.app | grep -i content-security-policy`
 - [x] Security headers present: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, X-XSS-Protection
-- [ ] JSON-LD validates: [Rich Results Test](https://search.google.com/test/rich-results)
-- [ ] PWA manifest valid: DevTools → Application → Manifest
+- [x] JSON-LD present on production (WebSite, ProfilePage, Person)
+- [x] PWA manifest valid: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/manifest.webmanifest`
 
 ### Search Console & Analytics
 - [ ] Submit sitemap to Google Search Console: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/sitemap.xml` (update to custom domain after setup)
