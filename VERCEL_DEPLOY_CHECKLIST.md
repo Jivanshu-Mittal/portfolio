@@ -82,13 +82,15 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 - [x] Project cover images load (SVG placeholders)
 
 ### Performance & SEO
-- [ ] Lighthouse (Desktop): Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90
-- [ ] Lighthouse (Mobile): Performance ≥ 85, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90
+- [ ] Lighthouse (Desktop): Performance **63** (target ≥ 90), Accessibility **89** (target ≥ 95), Best Practices **100**, SEO **100**
+- [ ] Lighthouse (Mobile): *not yet run*
 - [ ] Core Web Vitals: LCP < 2.5s, INP < 200ms, CLS < 0.1
 - [x] CSP headers present: `curl -I https://portfolio-seven-gilt-esbf7h8dlx.vercel.app | grep -i content-security-policy`
 - [x] Security headers present: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, X-XSS-Protection
 - [x] JSON-LD present on production (WebSite, ProfilePage, Person)
 - [x] PWA manifest valid: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/manifest.webmanifest`
+
+> **Performance notes**: Static export + Vercel Edge CDN gives good caching. Performance score impacted by font loading (Inter + JetBrains Mono from Google Fonts). Consider: self-hosting fonts, `preload: false` already set, `next/font` display: swap. Accessibility: minor color contrast issues in dark theme.
 
 ### Search Console & Analytics
 - [ ] Submit sitemap to Google Search Console: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/sitemap.xml` (update to custom domain after setup)
