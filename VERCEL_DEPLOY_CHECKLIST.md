@@ -24,10 +24,10 @@
 ### 2. Environment Variables (Settings → Environment Variables)
 | Name | Value | Environment |
 |------|-------|-------------|
-| `NEXT_PUBLIC_SITE_URL` | `https://jivanshu.dev` | Production, Preview |
+| `NEXT_PUBLIC_SITE_URL` | `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app` | Production, Preview |
 | `NEXT_PUBLIC_GA_ID` | *(optional)* | Production |
 
-**✅ Already configured in Vercel project**
+**✅ Update to Vercel URL** (run: `npx vercel env add NEXT_PUBLIC_SITE_URL production`)
 
 ### 3. Security Headers (CRITICAL - Settings → Security Headers)
 Since `output: 'export'` ignores `next.config.js` headers, **must configure in Vercel Dashboard**:
@@ -43,13 +43,12 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 **✅ Configured via vercel.json - all headers active on production**
 
 ### 4. Custom Domain (Settings → Domains)
-- [x] Add `jivanshu.dev` to Vercel project
-- [x] Add `www.jivanshu.dev` to Vercel project
-- [ ] Configure DNS at registrar (Google Domains / Namecheap / Cloudflare / etc.):
-  - **A record**: `@` → `216.198.79.1` AND `64.29.17.1` (Vercel recommends both)
-  - **CNAME**: `www` → `cname.vercel-dns.com` (or `6f6d86c81d5d8c13.vercel-dns-017.com.`)
-- [ ] Run `npx vercel domains verify jivanshu.dev` after DNS propagates
-- [ ] Enable "Redirect www to non-www" in Vercel dashboard
+- [x] **N/A — Using free Vercel subdomain** (budget: ₹0)
+- Production URL: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app`
+- No DNS configuration needed
+- SSL, CDN, global edge network included free
+- Update `NEXT_PUBLIC_SITE_URL` to Vercel URL in env vars
+- Submit Vercel URL sitemap to Google Search Console
 
 ### 5. Build & Deploy Settings
 - [x] **Build Command**: `npm run build` (runs `next build && next-sitemap`)
@@ -93,9 +92,9 @@ Permissions-Policy: camera=(), microphone=(), geolocation=()
 > **Performance notes**: Static export + Vercel Edge CDN gives good caching. Performance score impacted by font loading (Inter + JetBrains Mono from Google Fonts). Consider: self-hosting fonts, `preload: false` already set, `next/font` display: swap. Accessibility: minor color contrast issues in dark theme.
 
 ### Search Console & Analytics
-- [ ] Submit sitemap to Google Search Console: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/sitemap.xml` (update to custom domain after setup)
-- [ ] Verify domain ownership in Google Search Console
-- [ ] Set up Vercel Analytics (privacy-friendly) or Umami/Plausible
+- [ ] Submit sitemap to Google Search Console: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/sitemap.xml`
+- [ ] Verify URL prefix in Google Search Console (not domain — no DNS access)
+- [ ] Set up Vercel Analytics (Settings → Analytics → Enable — free, privacy-friendly)
 - [ ] Check for crawl errors after 24-48 hours
 
 ## Optional Enhancements (Post-Launch)
