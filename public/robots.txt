@@ -1,0 +1,15 @@
+# *
+User-agent: *
+Allow: /
+
+# *
+User-agent: *
+Disallow: /api/
+Disallow: /_next/
+Disallow: /static/
+
+# Host
+Host: https://jivanshu.dev
+
+# Sitemaps
+Sitemap: https://jivanshu.dev/sitemap.xml

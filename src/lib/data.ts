@@ -237,7 +237,7 @@ Built for small-to-mid merchants needing a customizable, performant storefront; 
         demo: 'https://del2-demo.vercel.app',
         caseStudy: '/work/del2',
       },
-      coverImage: '/images/del2-cover.jpg',
+      coverImage: '/images/del2-cover.svg',
       period: 'Jan 2024 — Aug 2024 (actively maintained)',
     },
     {
@@ -263,7 +263,7 @@ Built for small-to-mid merchants needing a customizable, performant storefront; 
         github: 'https://github.com/jivanshu/taskflow',
         demo: 'https://taskflow-demo.vercel.app',
       },
-      coverImage: '/images/taskflow-cover.jpg',
+      coverImage: '/images/taskflow-cover.svg',
       period: 'Sep 2023 — Dec 2023',
     },
     {
@@ -288,7 +288,7 @@ Built for small-to-mid merchants needing a customizable, performant storefront; 
       links: {
         github: 'https://github.com/jivanshu/api-gateway',
       },
-      coverImage: '/images/apigateway-cover.jpg',
+      coverImage: '/images/apigateway-cover.svg',
       period: 'Jun 2023 — Aug 2023',
     },
   ],

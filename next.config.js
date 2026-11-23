@@ -2,13 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   output: 'export',
-  experimental: {
-    turbo: {
-      resolveAlias: {
-        '@/*': './src/*',
-      },
-    },
-  },
+  turbopack: false,
   images: {
     remotePatterns: [
       {
@@ -26,33 +20,14 @@ const nextConfig = {
     ],
     unoptimized: true,
   },
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'Content-Security-Policy',
-            value: [
-              "default-src 'self'",
-              "script-src 'self' 'unsafe-eval' 'unsafe-inline' https://vercel.live",
-              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "font-src 'self' https://fonts.gstatic.com data:",
-              "img-src 'self' data: https:",
-              "connect-src 'self' https://vitals.vercel-insights.com",
-              "frame-ancestors 'none'",
-              "base-uri 'self'",
-              "form-action 'self'",
-            ].join('; '),
-          },
-          { key: 'X-Frame-Options', value: 'DENY' },
-          { key: 'X-Content-Type-Options', value: 'nosniff' },
-          { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
-          { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
-        ],
-      },
-    ];
-  },
+  // Note: async headers() does not work with `output: 'export'`.
+  // Security headers must be configured at the hosting platform level:
+  // - Netlify: netlify.toml or public/_headers
+  // - Vercel: vercel.json
+  // - Cloudflare Pages: public/_headers
+  // - GitHub Pages: _headers in repo root (or configure via Cloudflare Workers)
+  // - Apache: .htaccess
+  // - Nginx: nginx.conf
 };
 
 module.exports = nextConfig;

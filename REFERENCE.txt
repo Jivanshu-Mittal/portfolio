@@ -1,0 +1,69 @@
+JIVANSHU MITTAL — PORTFOLIO WEBSITE
+=====================================
+
+PROJECT OVERVIEW
+----------------
+A production-ready, dark-first portfolio built with Next.js 14 App Router,
+showcasing Del2 (full-stack e-commerce) and other projects.
+Designed per spec in den.txt with data from dat.txt.
+
+TECH STACK
+----------
+- Next.js 14.2 (App Router, Turbopack, TypeScript strict)
+- Tailwind CSS (custom design tokens, fluid clamp() typography)
+- Self-hosted fonts: Inter + JetBrains Mono (next/font/google)
+- Zero JS animation libraries — pure CSS animations
+
+KEY FILES
+---------
+src/lib/data.ts           → SINGLE SOURCE OF TRUTH (all content, 400+ lines)
+src/app/page.tsx          → Composes all 11 sections in order
+src/app/layout.tsx        → Metadata, fonts, JSON-LD, providers
+src/styles/globals.css    → Tailwind layers, CSS variables, animations
+tailwind.config.ts        → Complete design system (colors, type, easing, shadows)
+src/components/Button.tsx → 3 variants + 12 icon exports
+
+SECTIONS (in order)
+-------------------
+1. Hero        — Animated name, badges, tech marquee, live IST clock
+2. Who         — Word-by-word blur-in headline, 4 stats
+3. What        — Sticky sidebar (lg) + 3 expandable capability panels
+4. Philosophy  — 4 principles, responsive grid (1→2→4 cols)
+5. Ecosystem   — Dual marquee + 10 category cards (2-col grid)
+6. Work        — Auto-advance carousel (5s) + project cards grid
+7. Experience  — Timeline with stagger-in animations
+8. Process     — 5 steps with CSS connector line
+9. Now         — Live IST clock, current focus: ASP.NET Core
+10. Why        — 4 reasons in definition list
+11. ContactCTA — 3 buttons + radial glow
+Footer         — 3-col grid, massive brand mark, back-to-top
+
+NAVIGATION (3 systems)
+----------------------
+- Desktop: Fixed glass pill, animated indicator, scroll-spy
+- Mobile: 100dvh full-screen, staggered CSS counters, hamburger→X morph
+- Section Sidebar: Fixed right, 12 numbered dots, ping-ring active state
+
+ANIMATIONS (CSS-only)
+---------------------
+blur-in, gradient-sweep, pulse-dot, stagger-in, marquee, slide-up
+All respect prefers-reduced-motion
+
+ACCESSIBILITY & SEO
+-------------------
+- Skip link, semantic HTML, ARIA labels, inert, sr-only
+- JSON-LD: Person + WebSite + ProfilePage (30+ knowsAbout skills)
+- Open Graph, Twitter Card, PWA manifest
+- Color contrast meets WCAG AA
+
+COMMANDS
+--------
+npm run dev     → Start dev server (localhost:3000)
+npm run build   → Production build (no warnings)
+npm run lint    → ESLint check
+
+RECENT FIXES
+------------
+Replaced oversized display-h3 with context-appropriate clamp() values
+in Philosophy, Ecosystem, Work, What, Experience, Why, Process, Footer.
+Philosophy grid now responsive: 1col (mobile) → 2col (tablet) → 4col (desktop).
