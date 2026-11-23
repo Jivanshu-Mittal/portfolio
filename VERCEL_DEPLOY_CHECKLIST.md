@@ -12,10 +12,10 @@
 ## Vercel Project Setup
 
 ### 1. Create Vercel Project
-- [ ] Go to [vercel.com/new](https://vercel.com/new)
-- [ ] Import `Jivanshu-Mittal/portfolio` from GitHub
-- [ ] Configure:
-  - **Framework Preset**: Next.js (auto-detected)
+- [x] Go to [vercel.com/new](https://vercel.com/new)
+- [x] Import `Jivanshu-Mittal/portfolio` from GitHub
+- [x] Configure:
+  - **Framework Preset**: Next.js (auto-detected) → **Set to null in vercel.json**
   - **Build Command**: `npm run build` (default)
   - **Output Directory**: `out` (critical for static export)
   - **Install Command**: `npm ci` (default)
@@ -24,8 +24,10 @@
 ### 2. Environment Variables (Settings → Environment Variables)
 | Name | Value | Environment |
 |------|-------|-------------|
-| `NEXT_PUBLIC_SITE_URL` | `https://jivanshu.dev` | Production, Preview |
+| `NEXT_PUBLIC_SITE_URL` | `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app` | Production, Preview |
 | `NEXT_PUBLIC_GA_ID` | *(optional)* | Production |
+
+**✅ Update to Vercel URL** (run: `npx vercel env add NEXT_PUBLIC_SITE_URL production`)
 
 ### 3. Security Headers (CRITICAL - Settings → Security Headers)
 Since `output: 'export'` ignores `next.config.js` headers, **must configure in Vercel Dashboard**:
@@ -38,57 +40,61 @@ Referrer-Policy: strict-origin-when-cross-origin
 Permissions-Policy: camera=(), microphone=(), geolocation=()
 ```
 
+**✅ Configured via vercel.json - all headers active on production**
+
 ### 4. Custom Domain (Settings → Domains)
-- [ ] Add `jivanshu.dev`
-- [ ] Add `www.jivanshu.dev`
-- [ ] Configure DNS at registrar:
-  - **A record**: `@` → `76.76.21.21`
-  - **CNAME**: `www` → `cname.vercel-dns.com`
-- [ ] Enable "Redirect www to non-www" (or vice versa)
+- [x] **N/A — Using free Vercel subdomain** (budget: ₹0)
+- Production URL: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app`
+- No DNS configuration needed
+- SSL, CDN, global edge network included free
+- Update `NEXT_PUBLIC_SITE_URL` to Vercel URL in env vars
+- Submit Vercel URL sitemap to Google Search Console
 
 ### 5. Build & Deploy Settings
-- [ ] **Build Command**: `npm run build` (runs `next build && next-sitemap`)
-- [ ] **Output Directory**: `out`
-- [ ] **Install Command**: `npm ci`
-- [ ] **Node.js Version**: 20.x (matches CI)
+- [x] **Build Command**: `npm run build` (runs `next build && next-sitemap`)
+- [x] **Output Directory**: `out`
+- [x] **Install Command**: `npm ci`
+- [x] **Node.js Version**: 20.x (matches CI)
 
 ## Post-Deploy Verification
 
 ### Automated Checks
-- [ ] Vercel build logs show: "Exporting (2/2)" with 0 errors
-- [ ] `robots.txt` accessible at `https://jivanshu.dev/robots.txt`
-- [ ] `sitemap.xml` accessible at `https://jivanshu.dev/sitemap.xml`
-- [ ] Preview deployment works for PRs
+- [x] Vercel build logs show: "Exporting (2/2)" with 0 errors
+- [x] `robots.txt` accessible at `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/robots.txt`
+- [x] `sitemap.xml` accessible at `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/sitemap.xml`
+- [x] Preview deployment works for PRs
 
 ### Manual Testing (Production URL)
-- [ ] Home page loads: `https://jivanshu.dev`
-- [ ] All sections render: Hero, Who, What, Philosophy, Ecosystem, Work, Experience, Process, Now, Why, Contact
-- [ ] Navigation works: Desktop nav, Mobile nav, Section nav (sidebar)
-- [ ] Mobile menu opens/closes (100dvh, staggered animation)
-- [ ] Dark mode correct (ink background, paper text)
-- [ ] Reduced motion respected (`prefers-reduced-motion: reduce`)
-- [ ] Keyboard navigation: Tab through all interactive elements
-- [ ] Focus indicators visible on all interactive elements
-- [ ] Skip link works: Tab once → "Skip to main content" → Enter
-- [ ] 404 page works: `https://jivanshu.dev/invalid-route`
-- [ ] Contact buttons work: mailto:, tel:, download resume
-- [ ] External links open in new tab: GitHub, LinkedIn, Twitter
-- [ ] Project cards link to correct GitHub/demo URLs
-- [ ] Project cover images load (SVG placeholders)
+- [x] Home page loads: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app`
+- [x] All sections render: Hero, Who, What, Philosophy, Ecosystem, Work, Experience, Process, Now, Why, Contact
+- [x] Navigation works: Desktop nav, Mobile nav, Section nav (sidebar)
+- [x] Mobile menu opens/closes (100dvh, staggered animation)
+- [x] Dark mode correct (ink background, paper text)
+- [x] Reduced motion respected (`prefers-reduced-motion: reduce`)
+- [x] Keyboard navigation: Tab through all interactive elements
+- [x] Focus indicators visible on all interactive elements
+- [x] Skip link works: Tab once → "Skip to main content" → Enter
+- [x] 404 page works: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/invalid-route`
+- [x] Contact buttons work: mailto:, tel:, download resume
+- [x] External links open in new tab: GitHub, LinkedIn, Twitter
+- [x] Project cards link to correct GitHub/demo URLs
+- [x] Project cover images load (SVG placeholders)
 
 ### Performance & SEO
-- [ ] Lighthouse (Desktop): Performance ≥ 90, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90
-- [ ] Lighthouse (Mobile): Performance ≥ 85, Accessibility ≥ 95, Best Practices ≥ 90, SEO ≥ 90
+- [ ] Lighthouse (Desktop): Performance **63** (target ≥ 90), Accessibility **89** (target ≥ 95), Best Practices **100**, SEO **100**
+- [ ] Lighthouse (Mobile): *not yet run*
 - [ ] Core Web Vitals: LCP < 2.5s, INP < 200ms, CLS < 0.1
-- [ ] CSP headers present: `curl -I https://jivanshu.dev | grep -i content-security-policy`
-- [ ] Security headers present: X-Frame-Options, X-Content-Type-Options, Referrer-Policy
-- [ ] JSON-LD validates: [Rich Results Test](https://search.google.com/test/rich-results)
-- [ ] PWA manifest valid: DevTools → Application → Manifest
+- [x] CSP headers present: `curl -I https://portfolio-seven-gilt-esbf7h8dlx.vercel.app | grep -i content-security-policy`
+- [x] Security headers present: X-Frame-Options, X-Content-Type-Options, Referrer-Policy, Permissions-Policy, X-XSS-Protection
+- [x] JSON-LD present on production (WebSite, ProfilePage, Person)
+- [x] PWA manifest valid: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/manifest.webmanifest`
+
+> **Performance notes**: Static export + Vercel Edge CDN gives good caching. Performance score impacted by font loading (Inter + JetBrains Mono from Google Fonts). Consider: self-hosting fonts, `preload: false` already set, `next/font` display: swap. Accessibility: minor color contrast issues in dark theme.
 
 ### Search Console & Analytics
-- [ ] Submit sitemap to Google Search Console: `https://jivanshu.dev/sitemap.xml`
-- [ ] Verify domain ownership in Google Search Console
-- [ ] Set up Vercel Analytics (privacy-friendly) or Umami/Plausible
+- [ ] Submit sitemap to Google Search Console: `https://portfolio-seven-gilt-esbf7h8dlx.vercel.app/sitemap.xml`
+- [ ] Verify URL prefix in Google Search Console (not domain — no DNS access)
+- [ ] Set up Vercel Analytics (Settings → Analytics → Enable — free, privacy-friendly)
 - [ ] Check for crawl errors after 24-48 hours
 
 ## Optional Enhancements (Post-Launch)
