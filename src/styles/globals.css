@@ -4,8 +4,6 @@
 
 @layer base {
   :root {
-    --font-body: 'Inter Variable', system-ui, sans-serif;
-    --font-mono: 'JetBrains Mono Variable', monospace;
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
     --sm-accent: #FF7B52;
   }
@@ -19,9 +17,9 @@
   }
 
   body {
-    background-color: #0c0c0f;
+    background-color: #0b0b0c;
     color: #f3f0ea;
-    font-family: var(--font-body);
+    font-family: var(--font-body, system-ui, sans-serif);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
@@ -68,7 +66,7 @@
 
   .eyebrow {
     color: var(--sm-accent);
-    font-family: var(--font-mono);
+    font-family: var(--font-mono, monospace);
     font-size: 0.75rem;
     line-height: 1rem;
     text-transform: uppercase;
@@ -115,13 +113,16 @@
     line-height: 1.5rem;
   }
   .mono-sm {
-    font-family: var(--font-mono);
+    font-family: var(--font-mono, monospace);
     font-size: 0.75rem;
     line-height: 1.25;
     color: #b7b4ae;
   }
   .marquee-text {
-    font-family: var(--font-mono);
+    font-family: var(--font-mono, monospace);
+    font-size: clamp(1.125rem, 2.4vw, 1.75rem);
+    font-weight: 500;
+    line-height: 1.1;
     text-transform: uppercase;
     letter-spacing: -0.025em;
   }
@@ -137,7 +138,7 @@
   }
 
   .uv-link:hover {
-    color: var(--brand-400, #FB926F);
+    color: var(--sm-accent, #FF7B52);
   }
 
   .uv-link::after {
@@ -197,10 +198,6 @@
     background-position: 150% center;
     background-clip: text;
     color: transparent;
-  }
-
-  .stroked-text {
-    -webkit-text-stroke: 2px rgba(243, 240, 234, 0.5);
   }
 
   .blur-in-word {

@@ -1,37 +1,42 @@
-import { siteConfig } from '@/lib/data';
+import { siteConfig, SITE_URL } from '@/lib/data';
 
 export function JsonLd() {
+  const websiteId = `${SITE_URL}/#website`;
+  const profileId = `${SITE_URL}/#profile`;
+  const personId = `${SITE_URL}/#person`;
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@graph': [
       {
         '@type': 'WebSite',
-        '@id': `${siteConfig.email.replace('mailto:', 'https://')}#website`,
-        url: 'https://jivanshu.dev',
+        '@id': websiteId,
+        url: `${SITE_URL}/`,
         name: 'Jivanshu Mittal | Full-Stack Developer',
         description: siteConfig.description,
         publisher: {
-          '@id': `${siteConfig.email.replace('mailto:', 'https://')}#person`,
-        },
-        potentialAction: {
-          '@type': 'SearchAction',
-          target: {
-            '@type': 'EntryPoint',
-            urlTemplate: 'https://jivanshu.dev/search?q={search_term_string}',
-          },
-          'query-input': 'required name=search_term_string',
+          '@id': personId,
         },
       },
       {
         '@type': 'ProfilePage',
-        '@id': 'https://jivanshu.dev#profile',
+        '@id': profileId,
+        url: `${SITE_URL}/`,
+        name: 'Jivanshu Mittal | Full-Stack Developer',
+        isPartOf: {
+          '@id': websiteId,
+        },
+        about: {
+          '@id': personId,
+        },
         mainEntity: {
-          '@id': `${siteConfig.email.replace('mailto:', 'https://')}#person`,
+          '@id': personId,
         },
       },
       {
         '@type': 'Person',
-        '@id': `${siteConfig.email.replace('mailto:', 'https://')}#person`,
+        '@id': personId,
+        url: `${SITE_URL}/`,
         name: siteConfig.name,
         jobTitle: siteConfig.title,
         worksFor: {

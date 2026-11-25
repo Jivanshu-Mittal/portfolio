@@ -2,7 +2,6 @@ import type { Config } from 'tailwindcss';
 
 const config: Config = {
   content: [
-    './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
@@ -31,18 +30,9 @@ const config: Config = {
         mono: ['var(--font-mono)', 'monospace'],
       },
       fontSize: {
-        'display-h1': ['clamp(4rem, 12vw, 10rem)', { lineHeight: '1.1', fontWeight: '700', letterSpacing: '-0.02em' }],
-        'display-h2': ['clamp(3rem, 8vw, 6rem)', { lineHeight: '1.2', fontWeight: '700', letterSpacing: '-0.02em' }],
-        'display-h3': ['clamp(2rem, 5vw, 3.5rem)', { lineHeight: '1.25', fontWeight: '600', letterSpacing: '-0.02em' }],
-        'eyebrow': ['0.75rem', { lineHeight: '1', fontWeight: '500', letterSpacing: '0.02em' }],
-        'body-xl': ['clamp(1.5rem, 3.4vw, 3rem)', { lineHeight: '1.5', fontWeight: '500' }],
-        'body-lg': ['1.25rem', { lineHeight: '1.6', fontWeight: '400' }],
-        'body-base': ['1rem', { lineHeight: '1.6', fontWeight: '400' }],
-        'mono-sm': ['0.72rem', { lineHeight: '1.5', fontWeight: '400' }],
         'marquee': ['clamp(1.6rem, 5.2vw, 4.25rem)', { lineHeight: '1.0', fontWeight: '500' }],
         'mobile-menu': ['clamp(2.5rem, 13vw, 4rem)', { lineHeight: '1.0', fontWeight: '500', letterSpacing: '-0.02em' }],
-        'footer-brand': ['clamp(2.6rem, 11.4vw, 13.5rem)', { lineHeight: '0.86', fontWeight: '700', letterSpacing: '-0.055em' }],
-        'who-headline': ['clamp(1.75rem, 4.4vw, 3.75rem)', { lineHeight: '1.1', fontWeight: '700' }],
+        'footer-brand': ['clamp(2.25rem, 11.4vw, 13.5rem)', { lineHeight: '0.86', fontWeight: '700', letterSpacing: '-0.055em' }],
         'what-number': ['clamp(8rem, 17vw, 16rem)', { lineHeight: '1.0', fontWeight: '700' }],
       },
       spacing: {
@@ -96,7 +86,6 @@ const config: Config = {
       },
       backgroundImage: {
         'hero-gradient': 'linear-gradient(110deg, #FF7B52 0%, #FF7B52 35%, #FFE0D5 50%, #FF7B52 65%, #FF7B52 100%)',
-        'hero-gradient-reverse': 'linear-gradient(110deg, #FF7B52 0%, #FF7B52 35%, #FFE0D5 50%, #FF7B52 65%, #FF7B52 100%)',
         'radial-glow-tr': 'radial-gradient(60%_50%_at_75%_10%, rgba(255,91,46,0.13), transparent_70%)',
         'radial-glow-bl': 'radial-gradient(55%_60%_at_50%_100%, rgba(255,91,46,0.16), transparent_70%)',
         'contact-glow': 'radial-gradient(60%_50%_at_50%_100%, rgba(255,91,46,0.15), transparent_70%)',

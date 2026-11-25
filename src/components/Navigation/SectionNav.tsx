@@ -1,15 +1,14 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, type KeyboardEvent } from 'react';
 import { cn } from '@/lib/utils';
 import { navItems } from '@/lib/data';
 import { ChevronUpIcon, ChevronDownIcon } from '@/components/Button';
 
 export function SectionNav() {
   const [activeIndex, setActiveIndex] = useState(0);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [mounted, setMounted] = useState(false);
-  const tooltipRef = useRef<HTMLDivElement>(null);
-  const activeDotRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     setMounted(true);
@@ -17,19 +16,29 @@ export function SectionNav() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = navItems.map(item => {
-        const el = document.querySelector(item.href);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          return { id: item.href, top: rect.top + window.scrollY, bottom: rect.bottom + window.scrollY };
-        }
-        return null;
-      }).filter(Boolean) as { id: string; top: number; bottom: number }[];
+      const y = window.scrollY;
 
-      const currentSection = sections.find(s => window.scrollY + 100 >= s.top && window.scrollY + 100 < s.bottom);
+      if (window.innerHeight + y >= document.documentElement.scrollHeight - 20) {
+        setActiveIndex(navItems.length - 1);
+        return;
+      }
+
+      const sections = navItems
+        .map((item, index) => {
+          const el = document.querySelector(item.href);
+          if (!el) return null;
+          const rect = el.getBoundingClientRect();
+          return {
+            index,
+            top: rect.top + y,
+            bottom: rect.bottom + y,
+          };
+        })
+        .filter((s): s is { index: number; top: number; bottom: number } => s !== null);
+
+      const currentSection = sections.find((s) => y + 100 >= s.top && y + 100 < s.bottom);
       if (currentSection) {
-        const index = navItems.findIndex(item => item.href === currentSection.id);
-        if (index !== -1) setActiveIndex(index);
+        setActiveIndex(currentSection.index);
       }
     };
 
@@ -45,124 +54,120 @@ export function SectionNav() {
     }
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent, index: number) => {
+  const handleKeyDown = (e: KeyboardEvent<HTMLButtonElement>, index: number) => {
     if (e.key === 'ArrowUp' && index > 0) {
       e.preventDefault();
-      const prevBtn = document.querySelector(`[data-section-nav="${index - 1}"]`) as HTMLButtonElement;
-      prevBtn?.focus();
+      document.querySelector<HTMLButtonElement>(`[data-section-nav="${index - 1}"]`)?.focus();
     } else if (e.key === 'ArrowDown' && index < navItems.length - 1) {
       e.preventDefault();
-      const nextBtn = document.querySelector(`[data-section-nav="${index + 1}"]`) as HTMLButtonElement;
-      nextBtn?.focus();
-    } else if (e.key === 'Enter' || e.key === ' ') {
+      document.querySelector<HTMLButtonElement>(`[data-section-nav="${index + 1}"]`)?.focus();
+    } else if (e.key === 'Home') {
       e.preventDefault();
-      scrollToSection(navItems[index].href);
+      document.querySelector<HTMLButtonElement>('[data-section-nav="0"]')?.focus();
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      document.querySelector<HTMLButtonElement>(`[data-section-nav="${navItems.length - 1}"]`)?.focus();
     }
   };
 
   if (!mounted) return null;
 
+  const isFirstActive = activeIndex === 0;
+  const isLastActive = activeIndex === navItems.length - 1;
+
   return (
-    <aside
+    <nav
       className="fixed right-3 md:right-5 top-1/2 -translate-y-1/2 z-[90] hidden md:flex"
       aria-label="Section navigation"
-      role="navigation"
     >
       <div className="glass-pill p-1.5 flex flex-col items-center gap-1">
         <button
+          type="button"
           data-section-nav="-1"
           onClick={() => scrollToSection(navItems[0].href)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              scrollToSection(navItems[0].href);
-            }
-          }}
-          disabled={activeIndex === 0}
+          disabled={isFirstActive}
           className={cn(
             'p-1.5 rounded-full transition-all duration-200',
-            'hover:bg-brand-500 hover:text-ink',
-            activeIndex === 0 ? 'opacity-50 cursor-not-allowed' : 'text-mist'
+            isFirstActive
+              ? 'text-mist opacity-50 cursor-not-allowed'
+              : 'text-mist hover:bg-brand-500 hover:text-ink'
           )}
           aria-label="Go to top"
-          aria-disabled={activeIndex === 0}
         >
-          <ChevronUpIcon />
+          <ChevronUpIcon className="size-4" />
         </button>
 
-        <ol className="flex flex-col gap-1" role="list">
-          {navItems.map((item, index) => (
-            <li key={item.href} role="listitem">
-              <button
-                ref={index === activeIndex ? activeDotRef : undefined}
-                data-section-nav={index}
-                onClick={() => scrollToSection(item.href)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-                onMouseEnter={() => {
-                  if (tooltipRef.current) {
-                    const btn = document.querySelector(`[data-section-nav="${index}"]`) as HTMLButtonElement;
-                    if (btn) {
-                      const rect = btn.getBoundingClientRect();
-                      tooltipRef.current.style.transform = `translateX(-${rect.width + 12}px) translateY(${rect.top - rect.height / 2}px)`;
-                      tooltipRef.current.textContent = item.label;
-                      tooltipRef.current.classList.add('opacity-100', 'translate-x-0');
-                      tooltipRef.current.classList.remove('opacity-0', 'translate-x-2');
-                    }
-                  }
-                }}
-                onMouseLeave={() => {
-                  if (tooltipRef.current) {
-                    tooltipRef.current.classList.add('opacity-0', 'translate-x-2');
-                    tooltipRef.current.classList.remove('opacity-100', 'translate-x-0');
-                  }
-                }}
-                className={cn(
-                  'relative size-2 rounded-full transition-all duration-300 ease-out-expo',
-                  'flex-shrink-0',
-                  index === activeIndex
-                    ? 'size-3 bg-brand-500 shadow-ping-ring ring-2 ring-brand-500/40 animate-ping'
-                    : 'bg-white/40 hover:size-2.5 hover:bg-white'
-                )}
-                aria-label={`Go to ${item.label}`}
-                aria-current={index === activeIndex ? 'true' : undefined}
+        <ol className="flex flex-col items-center gap-1">
+          {navItems.map((item, index) => {
+            const isActive = index === activeIndex;
+            const isTooltipVisible = hoveredIndex === index;
+
+            return (
+              <li
+                key={item.href}
+                className="relative flex size-4 items-center justify-center"
               >
-                <span className="sr-only">{item.number} - {item.label}</span>
-              </button>
-            </li>
-          ))}
+                <button
+                  type="button"
+                  data-section-nav={index}
+                  onClick={() => scrollToSection(item.href)}
+                  onKeyDown={(e) => handleKeyDown(e, index)}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex((prev) => (prev === index ? null : prev))}
+                  onFocus={() => setHoveredIndex(index)}
+                  onBlur={() => setHoveredIndex((prev) => (prev === index ? null : prev))}
+                  className={cn(
+                    'relative rounded-full transition-all duration-300 ease-out-expo shrink-0',
+                    isActive
+                      ? 'size-3 bg-brand-500 shadow-ping-ring ring-2 ring-brand-500/40'
+                      : 'size-2 bg-white/40 hover:size-2.5 hover:bg-white'
+                  )}
+                  aria-label={`Go to ${item.label}`}
+                  aria-current={isActive ? 'location' : undefined}
+                >
+                  {isActive && (
+                    <span
+                      className="absolute inset-0 rounded-full bg-brand-500/60 animate-ping pointer-events-none"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span className="sr-only">
+                    {item.number} - {item.label}
+                  </span>
+                </button>
+
+                <div
+                  className={cn(
+                    'absolute right-full mr-3 top-1/2 -translate-y-1/2 pointer-events-none whitespace-nowrap transition-all duration-200 ease-out-expo',
+                    isTooltipVisible ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-2'
+                  )}
+                  aria-hidden="true"
+                >
+                  <span className="glass-pill inline-block px-3 py-1.5 text-sm font-medium text-paper">
+                    {item.label}
+                  </span>
+                </div>
+              </li>
+            );
+          })}
         </ol>
 
         <button
+          type="button"
           data-section-nav={navItems.length}
           onClick={() => scrollToSection(navItems[navItems.length - 1].href)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter' || e.key === ' ') {
-              e.preventDefault();
-              scrollToSection(navItems[navItems.length - 1].href);
-            }
-          }}
-          disabled={activeIndex === navItems.length - 1}
+          disabled={isLastActive}
           className={cn(
             'p-1.5 rounded-full transition-all duration-200',
-            'hover:bg-brand-500 hover:text-ink',
-            activeIndex === navItems.length - 1 ? 'opacity-50 cursor-not-allowed' : 'text-mist'
+            isLastActive
+              ? 'text-mist opacity-50 cursor-not-allowed'
+              : 'text-mist hover:bg-brand-500 hover:text-ink'
           )}
           aria-label="Go to bottom"
-          aria-disabled={activeIndex === navItems.length - 1}
         >
-          <ChevronDownIcon />
+          <ChevronDownIcon className="size-4" />
         </button>
-
-        <div
-          ref={tooltipRef}
-          className="absolute right-full mr-3 top-0 translate-x-2 opacity-0 transition-all duration-200 ease-out-expo pointer-events-none whitespace-nowrap"
-          aria-hidden="true"
-        >
-          <span className="glass-pill px-3 py-1.5 text-sm font-medium text-paper">
-            Section
-          </span>
-        </div>
       </div>
-    </aside>
+    </nav>
   );
 }

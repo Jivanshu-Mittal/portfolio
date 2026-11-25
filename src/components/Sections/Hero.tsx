@@ -1,8 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { cn } from '@/lib/utils';
 import { heroData } from '@/lib/data';
+import { getISTTime } from '@/lib/utils';
 import { Button, ArrowIcon, DownloadIcon } from '@/components/Button';
 
 export function Hero() {
@@ -10,13 +10,7 @@ export function Hero() {
 
   useEffect(() => {
     const updateTime = () => {
-      setIstTime(new Date().toLocaleTimeString('en-IN', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-        timeZone: 'Asia/Kolkata',
-      }));
+      setIstTime(getISTTime());
     };
     updateTime();
     const interval = setInterval(updateTime, 1000);
@@ -43,12 +37,12 @@ export function Hero() {
               <span className="relative size-1.5 rounded-full bg-brand-500 animate-pulse-dot" aria-hidden="true" />
               Now: {heroData.currentRole}
             </span>
-            <span className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-mist border border-white/10">
+            <span className="hidden md:inline-flex items-center gap-1.5 rounded-full bg-white/5 px-3 py-1 text-xs font-medium text-mist border border-white/10 tabular-nums">
               <svg className="size-3.5 text-brand-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                 <circle cx="12" cy="12" r="10" />
                 <polyline points="12 6 12 12 16 14" />
               </svg>
-              {istTime} IST
+              {istTime ? `${istTime} IST` : 'IST · India'}
             </span>
           </div>
         </div>
@@ -65,7 +59,7 @@ export function Hero() {
           ))}
         </h1>
 
-        <p className="body-xl max-w-2xl mt-6 text-gradient">
+        <p className="body-xl max-w-2xl mt-6 text-gradient animate-gradient-sweep bg-200%">
           {heroData.subtitle}
         </p>
 
@@ -92,29 +86,29 @@ export function Hero() {
             icon={<DownloadIcon />}
             asChild
           >
-            <a href={heroData.cta.tertiary.href} download>{heroData.cta.tertiary.label}</a>
+            <a href={heroData.cta.tertiary.href} download={heroData.cta.tertiary.download}>{heroData.cta.tertiary.label}</a>
           </Button>
         </div>
 
         <div className="mt-16 border-y border-white/10 bg-ink/60 backdrop-blur-sm overflow-hidden" aria-hidden="true">
           <div className="flex animate-marquee" style={{ width: 'max-content' }}>
             {heroData.techMarquee.map((tech, i) => (
-              <span key={i} className="marquee-text px-6 py-3 whitespace-nowrap flex-shrink-0">
+              <span key={i} className="marquee-text text-mist px-6 py-3 whitespace-nowrap flex-shrink-0">
                 {tech}
               </span>
             ))}
             {heroData.techMarquee.map((tech, i) => (
-              <span key={`${i}-dup`} className="marquee-text px-6 py-3 whitespace-nowrap flex-shrink-0">
+              <span key={`${i}-dup`} className="marquee-text text-mist px-6 py-3 whitespace-nowrap flex-shrink-0">
                 {tech}
               </span>
             ))}
             {heroData.techMarquee.map((tech, i) => (
-              <span key={`${i}-dup2`} className="marquee-text px-6 py-3 whitespace-nowrap flex-shrink-0">
+              <span key={`${i}-dup2`} className="marquee-text text-mist px-6 py-3 whitespace-nowrap flex-shrink-0">
                 {tech}
               </span>
             ))}
             {heroData.techMarquee.map((tech, i) => (
-              <span key={`${i}-dup3`} className="marquee-text px-6 py-3 whitespace-nowrap flex-shrink-0">
+              <span key={`${i}-dup3`} className="marquee-text text-mist px-6 py-3 whitespace-nowrap flex-shrink-0">
                 {tech}
               </span>
             ))}

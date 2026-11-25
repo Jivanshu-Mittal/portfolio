@@ -2,10 +2,10 @@ import type { Metadata, Viewport } from 'next';
 import { Inter, JetBrains_Mono } from 'next/font/google';
 import '@/styles/globals.css';
 import { JsonLd } from '@/components/JsonLd';
-import { siteConfig } from '@/lib/data';
+import { SITE_URL, siteConfig } from '@/lib/data';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://jivanshu.dev'),
+  metadataBase: new URL(SITE_URL),
   title: 'Jivanshu Mittal | Full-Stack Developer (Backend Focus)',
   description: 'Building scalable backends and performant frontends. Specialized in Node.js, TypeScript, MongoDB, and Next.js.',
   keywords: ['Full-Stack Developer', 'Backend Engineer', 'Node.js', 'TypeScript', 'Next.js', 'MongoDB', 'React'],
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'en_IN',
-    url: 'https://jivanshu.dev',
+    url: SITE_URL,
     siteName: 'Jivanshu Mittal',
     title: 'Jivanshu Mittal | Full-Stack Developer (Backend Focus)',
     description: 'Building scalable backends and performant frontends. Specialized in Node.js, TypeScript, MongoDB, and Next.js.',
@@ -54,7 +54,7 @@ const inter = Inter({
   subsets: ['latin'],
   variable: '--font-body',
   display: 'swap',
-  preload: false,
+  preload: true,
   weight: ['400', '500', '600', '700'],
 });
 
@@ -62,7 +62,7 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
-  preload: false,
+  preload: true,
   weight: ['400', '500', '600', '700'],
 });
 
@@ -74,12 +74,10 @@ export default function RootLayout({
   return (
     <html lang="en-IN" className={`${inter.variable} ${jetbrainsMono.variable}`}>
       <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://github.com" />
         <link rel="dns-prefetch" href="https://linkedin.com" />
       </head>
-      <body className="bg-ink text-paper antialiased">
+      <body className="bg-ink text-paper font-body antialiased">
         <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:p-4 focus:bg-ink focus:text-brand-400">
           Skip to main content
         </a>
