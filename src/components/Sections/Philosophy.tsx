@@ -14,7 +14,7 @@ export function Philosophy() {
           Principles I Build By
         </h2>
 
-        <ol className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-8" role="list">
+        <ol className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-8">
           {philosophyData.map((principle, i) => (
             <li
               key={principle.number}
@@ -23,7 +23,6 @@ export function Philosophy() {
                 'hover:bg-white/[0.025] transition-colors duration-200',
                 'md:col-span-6 lg:col-span-3'
               )}
-              role="listitem"
             >
               <div className="flex items-start gap-4">
                 <span className={cn(

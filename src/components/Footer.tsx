@@ -1,21 +1,23 @@
 'use client';
 
 import Link from 'next/link';
-import { cn } from '@/lib/utils';
 import { siteConfig, navItems } from '@/lib/data';
 import { ExternalLinkIcon, GitHubIcon, LinkedInIcon, ChevronUpIcon } from '@/components/Button';
 
 export function Footer() {
   return (
-    <footer className="border-t border-white/10 py-28 md:py-40" role="contentinfo">
+    <footer className="border-t border-white/10 pt-28 pb-40 md:py-40" role="contentinfo">
       <div className="container-x">
-        <div className="md:grid md:grid-cols-12 gap-12 mb-20">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 md:gap-12 mb-20">
           <div className="md:col-span-5">
-            <a href="mailto:{siteConfig.email}" className="block mb-4">
-              <address className="not-italic text-[clamp(1.125rem,2.5vw,1.75rem)] font-medium text-paper hover:text-brand-400 transition-colors [text-wrap:balance]">
+            <address className="not-italic mb-4">
+              <a
+                href={`mailto:${siteConfig.email}`}
+                className="inline-block max-w-full break-words text-[clamp(1.125rem,2.5vw,1.75rem)] font-medium text-paper hover:text-brand-400 transition-colors [text-wrap:balance]"
+              >
                 {siteConfig.email}
-              </address>
-            </a>
+              </a>
+            </address>
             <p className="body-lg text-mist max-w-xl">
               {siteConfig.description}
             </p>
@@ -23,7 +25,7 @@ export function Footer() {
 
           <nav className="md:col-span-3" aria-label="Footer navigation">
             <h3 className="font-semibold text-paper mb-4">Navigate</h3>
-            <ul className="space-y-3" role="list">
+            <ul className="space-y-3">
               {navItems.slice(1, 10).map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className="uv-link body-base">
@@ -36,7 +38,7 @@ export function Footer() {
 
           <div className="md:col-span-4">
             <h3 className="font-semibold text-paper mb-4">Elsewhere</h3>
-            <ul className="space-y-3" role="list">
+            <ul className="space-y-3">
               <li>
                 <a href={siteConfig.github} target="_blank" rel="noopener noreferrer" className="uv-link body-base flex items-center gap-2">
                   <GitHubIcon className="size-5" aria-hidden="true" />
@@ -74,17 +76,19 @@ export function Footer() {
         </div>
 
         <div className="pt-16 border-t border-white/10">
-          <div className="text-center mb-12">
-            <h2 className="text-footer-brand font-body uppercase select-none whitespace-nowrap leading-[0.86] tracking-[-0.055em]">
-              JIVANSHU<br className="hidden md:block" />MITTAL
+          <div className="text-center mb-12 max-w-full overflow-hidden">
+            <h2 className="text-footer-brand font-body uppercase select-none leading-[0.86] tracking-[-0.055em]">
+              <span className="block">JIVANSHU</span>
+              <span className="block">MITTAL</span>
             </h2>
           </div>
 
-          <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-mist body-base">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-3 md:gap-4 text-center md:text-left text-mist body-base">
             <p>© 2026 Jivanshu Mittal. Designed and built by me.</p>
-            <p>Built with Next.js, Tailwind CSS, React Aria & custom animations.</p>
+            <p>Built with Next.js, Tailwind CSS &amp; custom animations.</p>
             <button
-              className="fixed bottom-6 right-6 z-50 h-12 w-12 rounded-full glass-panel flex items-center justify-center hover:bg-white/10 transition-colors"
+              type="button"
+              className="fixed bottom-20 right-6 lg:bottom-6 lg:right-6 z-50 h-12 w-12 rounded-full glass-panel flex items-center justify-center text-paper hover:bg-white/10 transition-colors"
               onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               aria-label="Back to top"
             >

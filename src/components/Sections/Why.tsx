@@ -1,6 +1,5 @@
 'use client';
 
-import { cn } from '@/lib/utils';
 import { whyData } from '@/lib/data';
 
 export function Why() {
@@ -14,24 +13,26 @@ export function Why() {
           What You Get
         </h2>
 
-        <dl className="md:grid md:grid-cols-2 gap-8" role="list">
+        <dl className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {whyData.map((item) => (
             <div
               key={item.number}
-              className="relative pt-6 border-t border-white/10 pl-9"
-              role="listitem"
+              className="relative pt-6 border-t border-white/10"
             >
-              <div className="flex items-start gap-4">
-                <dt className={cn(
-                  'flex items-center justify-center size-8 rounded-full bg-brand-500/20 text-brand-400 font-mono text-lg font-bold flex-shrink-0'
-                )}>
+              <dt className="flex items-start gap-4 mb-2">
+                <span
+                  aria-hidden="true"
+                  className="flex items-center justify-center size-8 rounded-full bg-brand-500/20 text-brand-400 font-mono text-sm font-bold flex-shrink-0 mt-0.5"
+                >
                   {item.number}
-                </dt>
-                <div>
-                  <h3 className="text-[clamp(1.125rem,2.5vw,1.75rem)] font-semibold text-paper leading-snug tracking-tight mb-2">{item.title}</h3>
-                  <dd className="body-base text-mist leading-relaxed">{item.description}</dd>
-                </div>
-              </div>
+                </span>
+                <span className="text-[clamp(1.125rem,2.5vw,1.75rem)] font-semibold text-paper leading-snug tracking-tight">
+                  {item.title}
+                </span>
+              </dt>
+              <dd className="body-base text-mist leading-relaxed pl-12">
+                {item.description}
+              </dd>
             </div>
           ))}
         </dl>

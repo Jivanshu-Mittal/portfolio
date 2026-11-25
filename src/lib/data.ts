@@ -1,11 +1,41 @@
+const DEFAULT_SITE_URL = 'https://jivanshu.dev';
+
+/**
+ * Resolves the canonical site URL from environment variables with a production fallback.
+ */
+function resolveSiteUrl(): string {
+  const candidates = [
+    process.env.NEXT_PUBLIC_SITE_URL,
+    process.env.VERCEL_PROJECT_PRODUCTION_URL,
+    process.env.VERCEL_URL,
+  ];
+
+  for (const raw of candidates) {
+    const trimmed = raw?.trim();
+    if (!trimmed) continue;
+
+    const normalized = trimmed.replace(/\/+$/, '');
+    if (!normalized) continue;
+
+    return /^https?:\/\//i.test(normalized)
+      ? normalized
+      : `https://${normalized}`;
+  }
+
+  return DEFAULT_SITE_URL;
+}
+
+export const SITE_URL = resolveSiteUrl();
+
 export const siteConfig = {
   name: 'Jivanshu Mittal',
   title: 'Full-Stack Developer (Backend Focus)',
   description: 'Building scalable backends and performant frontends. Specialized in Node.js, TypeScript, MongoDB, and Next.js.',
+  url: SITE_URL,
   email: 'jivanshumitt1052@gmail.com',
   phone: '+91 9997171408',
   location: 'Mathura, Uttar Pradesh, India',
-  github: 'https://github.com/jivanshu',
+  github: 'https://github.com/Jivanshu-Mittal',
   linkedin: 'https://linkedin.com/in/jivanshu-mittal',
   twitter: 'https://twitter.com/jivanshu',
   resumeUrl: '/resume.pdf',
@@ -76,7 +106,7 @@ export const whatData = {
       number: '02',
       title: 'Full-Stack Development',
       description: 'End-to-end feature delivery using Next.js, React, and TypeScript. From database schema to pixel-perfect UI, with proper testing and CI/CD pipelines.',
-      highlights: ['Next.js 14+ App Router', 'TypeScript & Zod', 'Tailwind CSS', 'Jest & Supertest'],
+      highlights: ['Next.js 15 App Router', 'TypeScript & Zod', 'Tailwind CSS', 'Jest & Supertest'],
       details: `Delivered complete e-commerce platforms with user authentication, product catalogs, cart/checkout flows, admin dashboards, and real-time updates. Enforced code quality with ESLint, Prettier, Husky, and conventional commits.`,
     },
     {
@@ -123,7 +153,7 @@ export const ecosystemData = {
       title: 'Frontend Frameworks',
       badge: 'Working Knowledge',
       description: 'Building performant, accessible UIs with modern React patterns.',
-      tags: ['Next.js 14', 'React 18', 'TypeScript', 'Tailwind CSS'],
+      tags: ['Next.js 15', 'React 19', 'TypeScript', 'Tailwind CSS'],
       link: '/skills#frontend',
     },
     {
@@ -201,7 +231,27 @@ export const ecosystemData = {
   ],
 };
 
-export const workData = {
+export interface ProjectLinks {
+  caseStudy: string;
+  github?: string;
+  demo?: string;
+}
+
+export interface ProjectItem {
+  id: string;
+  title: string;
+  shortDesc: string;
+  description: string;
+  tags: string[];
+  highlights: string[];
+  role: string;
+  contributions: string[];
+  links: ProjectLinks;
+  coverImage: string;
+  period: string;
+}
+
+export const workData: { projects: ProjectItem[] } = {
   projects: [
     {
       id: 'del2',
@@ -233,9 +283,7 @@ Built for small-to-mid merchants needing a customizable, performant storefront; 
         'Code-reviewed teammates\' PRs (frontend components, UI integration)',
       ],
       links: {
-        github: 'https://github.com/jivanshu/del2',
-        demo: 'https://del2-demo.vercel.app',
-        caseStudy: '/work/del2',
+        caseStudy: '/work#del2',
       },
       coverImage: '/images/del2-cover.svg',
       period: 'Jan 2024 — Aug 2024 (actively maintained)',
@@ -260,8 +308,7 @@ Built for small-to-mid merchants needing a customizable, performant storefront; 
         'Achieved 90+ Lighthouse scores',
       ],
       links: {
-        github: 'https://github.com/jivanshu/taskflow',
-        demo: 'https://taskflow-demo.vercel.app',
+        caseStudy: '/work#project-2',
       },
       coverImage: '/images/taskflow-cover.svg',
       period: 'Sep 2023 — Dec 2023',
@@ -286,7 +333,7 @@ Built for small-to-mid merchants needing a customizable, performant storefront; 
         'Deployed to Kubernetes with Helm charts',
       ],
       links: {
-        github: 'https://github.com/jivanshu/api-gateway',
+        caseStudy: '/work#project-3',
       },
       coverImage: '/images/apigateway-cover.svg',
       period: 'Jun 2023 — Aug 2023',
@@ -413,14 +460,14 @@ export const whyData = [
 
 export const contactData = {
   headline: 'Let\'s Build Something Together',
-  description: 'Open to full-time roles, internships, and interesting freelance projects. Currently seeking opportunities starting mid-2025.',
+  description: 'Open to full-time roles, internships, and interesting freelance projects. Currently seeking internships and 2027 full-time software engineering roles.',
   buttons: [
     { label: 'Start a Conversation', href: 'mailto:jivanshumitt1052@gmail.com', variant: 'primary' },
     { label: 'jivanshumitt1052@gmail.com', href: 'mailto:jivanshumitt1052@gmail.com', variant: 'secondary' },
     { label: 'Download Resume', href: '/resume.pdf', variant: 'tertiary', download: true },
   ],
   social: [
-    { label: 'GitHub', href: 'https://github.com/jivanshu', icon: 'github' },
+    { label: 'GitHub', href: 'https://github.com/Jivanshu-Mittal', icon: 'github' },
     { label: 'LinkedIn', href: 'https://linkedin.com/in/jivanshu-mittal', icon: 'linkedin' },
     { label: 'Twitter', href: 'https://twitter.com/jivanshu', icon: 'twitter' },
     { label: 'Phone', href: 'tel:+919997171408', icon: 'phone' },

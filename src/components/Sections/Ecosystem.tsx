@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { cn } from '@/lib/utils';
 import { ecosystemData } from '@/lib/data';
 import { ExternalLinkIcon } from '@/components/Button';
@@ -42,44 +43,43 @@ export function Ecosystem() {
           </div>
         </div>
 
-        <div className="md:grid md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {ecosystemData.categories.map((cat) => (
             <article
               key={cat.number}
-              className="group p-6 rounded-2xl border border-white/10 hover:bg-white/[0.025] transition-colors duration-200"
+              className="group min-w-0 p-4 sm:p-6 rounded-2xl border border-white/10 hover:bg-white/[0.025] transition-colors duration-200"
             >
-              <div className="flex items-start gap-4 mb-4">
+              <div className="flex items-start gap-3 sm:gap-4 mb-4">
                 <span className="text-brand-400 font-mono text-2xl font-bold flex-shrink-0">
                   {cat.number}
                 </span>
-                <div className="flex-1">
+                <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-2 flex-wrap">
-                    <h3 className={cn('text-[clamp(1.25rem,3vw,2rem)] font-semibold leading-snug tracking-tight', 'group-hover:text-brand-400 transition-colors')}>
+                    <h3 className={cn('min-w-0 break-words text-[clamp(1.25rem,3vw,2rem)] font-semibold leading-snug tracking-tight', 'group-hover:text-brand-400 transition-colors')}>
                       {cat.title}
                     </h3>
-                    <span className="text-xs font-medium px-2 py-0.5 rounded-full bg-white/5 text-mist border border-white/10 flex-shrink-0">
+                    <span className="max-w-full break-words text-xs font-medium px-2 py-0.5 rounded-full bg-white/5 text-mist border border-white/10">
                       {cat.badge}
                     </span>
                   </div>
-                  <p className="body-base text-mist mb-4">{cat.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-4" role="list">
+                  <p className="body-base text-mist mb-4 break-words">{cat.description}</p>
+                  <ul className="flex flex-wrap gap-2 mb-4">
                     {cat.tags.map((tag, i) => (
-                      <span
+                      <li
                         key={i}
-                        className="mono-sm px-2 py-1 rounded bg-white/5 border border-white/10"
-                        role="listitem"
+                        className="mono-sm max-w-full break-words px-2 py-1 rounded bg-white/5 border border-white/10"
                       >
                         {tag}
-                      </span>
+                      </li>
                     ))}
-                  </div>
-                  <a
+                  </ul>
+                  <Link
                     href={cat.link}
                     className="uv-link text-sm font-mono"
                   >
                     Explore
                     <ExternalLinkIcon className="size-4" aria-hidden="true" />
-                  </a>
+                  </Link>
                 </div>
               </div>
             </article>
