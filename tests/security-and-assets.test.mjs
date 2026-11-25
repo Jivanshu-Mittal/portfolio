@@ -320,6 +320,14 @@ describe('Security headers and tightened CSP across deployment configs', () => {
       );
     });
   }
+
+  it('vercel.json enables cleanUrls when framework is null so static routes resolve without .html', () => {
+    const raw = fs.readFileSync(path.join(ROOT_DIR, 'vercel.json'), 'utf8');
+    const parsed = JSON.parse(raw);
+    if (parsed.framework === null) {
+      assert.equal(parsed.cleanUrls, true, 'vercel.json must set "cleanUrls": true when framework is null');
+    }
+  });
 });
 
 describe('Source code hygiene in src/', () => {

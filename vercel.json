@@ -3,6 +3,7 @@
   "outputDirectory": "out",
   "installCommand": "npm ci",
   "framework": null,
+  "cleanUrls": true,
   "headers": [
     {
       "source": "/(.*)",
